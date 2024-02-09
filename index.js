@@ -7,22 +7,37 @@ import postRoutes from './routes/post.route.js';
 import commentRoutes from './routes/comment.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
-import cors from 'cors'; 
+import cors from 'cors';
 dotenv.config();
 
-mongoose
-  .connect("mongodb://localhost:27017/Blog")
-  .then(() => {
-    console.log('MongoDb is connected');
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+// mongoose
+//   .connect("mongodb://localhost:27017/Blog")
+//   .then(() => {
+//     console.log('MongoDb is connected');
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+
+const connectToDatabase = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_DB, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('Connected to MongoDB Atlas');
+  } catch (error) {
+    console.error('Error connecting to MongoDB Atlas:', error);
+  }
+};
+
+connectToDatabase();
 
 const __dirname = path.resolve();
 
 const app = express();
-app.use(cors()); 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 const PORT = 4100;
